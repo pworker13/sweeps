@@ -1,0 +1,16 @@
+{
+  "name": "barchart-unusual-to-discord",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "discord.js": "^14.0.0",
+    "playwright": "^1.40.0",
+    "@playwright/test": "^1.46.0",
+    "dotenv": "^17.2.1",
+    "node-fetch": "^2.6.7"
+  },
+  "scripts": {
+    "start": "node index.mjs",
+    "install-browser": "npx playwright install firefox"
+  }
+}

@@ -1,0 +1,68 @@
+name: ⭐ Sweeps Bot
+
+on:
+  repository_dispatch:
+    types: [run-sweeps]
+  workflow_dispatch:
+    
+permissions:
+  contents: write    # allow GITHUB_TOKEN to push
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false # if action is already running, do not cancel it, wait for it to finish
+
+jobs:
+  large-gold-sweeps:
+    runs-on: ubuntu-latest
+    steps:
+
+      # 1) Checkout with full history and persist the token
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0           # full history so git push will work
+          ref: main                # explicitly checkout `main`
+          persist-credentials: true
+
+      # 2) Setup & run your RSS bot
+      - name: Use Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Playwright browsers
+        # this will pull down Firefox
+        run: npx playwright install --with-deps firefox
+
+      - name: Get large and gold sweeps
+        env:
+          WEBHOOK_LARGE:   ${{ vars.WEBHOOK_LARGE }}
+          WEBHOOK_GOLDEN: ${{ vars.WEBHOOK_GOLDEN }}
+          DEBUG:       ${{ vars.DEBUG }}
+          MIN_PREMIUM_LARGE:     ${{ vars.MIN_PREMIUM_LARGE }}
+          MIN_PREMIUM_GOLDEN:     ${{ vars.MIN_PREMIUM_GOLDEN }}
+          MAX_DTE_GOLDEN:     ${{ vars.MAX_DTE_GOLDEN }}
+          MIN_VOL_OI:     ${{ vars.MIN_VOL_OI }}
+          AGGRESSIVE_LAST_TO_ASK:     ${{ vars.AGGRESSIVE_LAST_TO_ASK }}
+        run: node index.mjs
+
+      # 3) Commit & push only if there are changes
+      - name: Commit updated state
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+          # stash local changes before pulling
+          git stash --include-untracked || true
+          git pull --rebase origin main
+          git stash pop || true
+      
+          git add posted-state.json
+          # if there's something to commit, do it
+          git diff --cached --quiet || git commit -m "ci: update posted-state.json"
+          git push
