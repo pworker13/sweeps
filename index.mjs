@@ -74,7 +74,7 @@ function isGoldenSweepLike(r) {
 function makeEmbed(r, tag) {
   const color = r.Type === 'Call' ? 0x2ecc71 : 0xe74c3c;
   return [{
-    title: `${tag}: ${r.Symbol} ${r.Type} ${r.Strike} ${fmtUS(r.ExpirationISO)}`,
+    title: `${tag}: ${r.Symbol} ${r.Type} ${r.Strike}$ ${fmtUS(r.ExpirationISO)}`,
     color,
     fields: [
       { name: 'Premium ~$', value: r.Premium.toLocaleString(), inline: true },
@@ -278,13 +278,13 @@ async function main() {
   for (const r of large.slice(0, 15)) {
     const key = rowKey(r);
     if (state.posted[key]) { log('Skip duplicate (large):', key); continue; }
-    await postDiscord(WEBHOOK_LARGE, makeEmbed(r, 'Large Sweep-like'));
+    await postDiscord(WEBHOOK_LARGE, makeEmbed(r, 'Large Sweep'));
     state.posted[key] = Date.now(); posted++; await sleep(400);
   }
   for (const r of golden.slice(0, 15)) {
     const key = rowKey(r);
     if (state.posted[key]) { log('Skip duplicate (golden):', key); continue; }
-    await postDiscord(WEBHOOK_GOLDEN, makeEmbed(r, 'GOLDEN Sweep-like'));
+    await postDiscord(WEBHOOK_GOLDEN, makeEmbed(r, 'GOLDEN Sweep'));
     state.posted[key] = Date.now(); posted++; await sleep(400);
   }
 
