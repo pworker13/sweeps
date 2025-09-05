@@ -20,6 +20,9 @@ const MAX_DTE_GOLDEN      = Number(process.env.MAX_DTE_GOLDEN ?? 14);
 const MIN_VOL_OI          = Number(process.env.MIN_VOL_OI ?? 1.5);
 const AGGRESSIVE_LAST_ASK = Number(process.env.AGGRESSIVE_LAST_TO_ASK ?? 0.95);
 
+const HISTORY_MINUTES = Number(process.env.HISTORY_MINUTES ?? 10);
+const WINDOW_MS = HISTORY_MINUTES * 60_000;
+
 const STATE_FILE = path.join(__dirname, 'posted-state.json');
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
@@ -50,11 +53,18 @@ const daysToExpiry = (iso) => {
 };
 
 async function loadState() {
-  try { return JSON.parse(await fs.readFile(STATE_FILE, 'utf8')); }
-  catch { return { posted: {} }; }
+  try {
+    const j = JSON.parse(await fs.readFile(STATE_FILE, 'utf8'));
+    return { posted: j.posted || {}, recent: Array.isArray(j.recent) ? j.recent : [] };
+  } catch {
+    return { posted: {}, recent: [] };
+  }
 }
 async function saveState(state) {
-  await fs.writeFile(STATE_FILE, JSON.stringify(state, null, 2));
+  await fs.writeFile(STATE_FILE, JSON.stringify({
+    posted: state.posted,
+    recent: state.recent
+  }, null, 2));
 }
 
 function rowKey(r) {
@@ -270,9 +280,12 @@ async function main() {
   }
 
   const rows = normalizeRows(json);
+  const nowTs = Date.now();
+  state.recent = Array.isArray(state.recent) ? state.recent.filter(r => r.ts > nowTs - WINDOW_MS) : [];
+  for (const r of rows) state.recent.push({ ...r, rowKey: rowKey(r), ts: nowTs });
+
   const large  = rows.filter(isLargeSweepLike);
-  const golden = rows.filter(isGoldenSweepLike);
-  log(`Filter results → total:${rows.length} large:${large.length} golden:${golden.length}`);
+  log(`Filter results → total:${rows.length} large:${large.length}`);
 
   let posted = 0;
   for (const r of large.slice(0, 15)) {
@@ -281,11 +294,49 @@ async function main() {
     await postDiscord(WEBHOOK_LARGE, makeEmbed(r, 'Large Sweep'));
     state.posted[key] = Date.now(); posted++; await sleep(400);
   }
-  for (const r of golden.slice(0, 15)) {
-    const key = rowKey(r);
-    if (state.posted[key]) { log('Skip duplicate (golden):', key); continue; }
-    await postDiscord(WEBHOOK_GOLDEN, makeEmbed(r, 'GOLDEN Sweep'));
-    state.posted[key] = Date.now(); posted++; await sleep(400);
+
+  const groups = new Map();
+  for (const r of state.recent) {
+    const k = `${r.Symbol}|${r.Type}|${r.Strike}|${r.ExpirationISO}`;
+    let g = groups.get(k);
+    if (!g) {
+      g = { key: k, Symbol: r.Symbol, Type: r.Type, Strike: r.Strike, ExpirationISO: r.ExpirationISO,
+            volumeSum: 0, oiSum: 0, premiumSum: 0, earliest: Infinity, latest: 0, rows: [] };
+      groups.set(k, g);
+    }
+    g.volumeSum += r.Volume;
+    g.oiSum += r.OI;
+    g.premiumSum += r.Premium;
+    const t = Date.parse(r.Time) || 0;
+    if (t && t < g.earliest) g.earliest = t;
+    if (t && t > g.latest) g.latest = t;
+    g.rows.push(r);
+  }
+
+  for (const g of groups.values()) {
+    const voloi = g.volumeSum / g.oiSum;
+    const ref = g.rows.reduce((a, b) => (b.ts > a.ts ? b : a), g.rows[0]);
+    const cand = {
+      Symbol: g.Symbol,
+      Type: g.Type,
+      Strike: g.Strike,
+      ExpirationISO: g.ExpirationISO,
+      Volume: g.volumeSum,
+      OI: g.oiSum,
+      Premium: g.premiumSum,
+      VolOI: Number.isFinite(voloi) ? Math.round(voloi * 100) / 100 : 0,
+      Bid: ref.Bid,
+      Ask: ref.Ask,
+      Last: ref.Last,
+      Moneyness: ref.Moneyness,
+      Time: ref.Time
+    };
+    if (!isGoldenSweepLike(cand)) continue;
+    if (state.posted[g.key]) { log('Skip duplicate (golden group):', g.key); continue; }
+    await postDiscord(WEBHOOK_GOLDEN, makeEmbed(cand, 'GOLDEN Sweep'));
+    state.posted[g.key] = Date.now();
+    for (const r of g.rows) if (r.rowKey) state.posted[r.rowKey] = Date.now();
+    posted++; await sleep(400);
   }
 
   const cutoff = Date.now() - 2 * 86400000;

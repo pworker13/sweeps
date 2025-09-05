@@ -49,6 +49,7 @@ jobs:
           MAX_DTE_GOLDEN:     ${{ vars.MAX_DTE_GOLDEN }}
           MIN_VOL_OI:     ${{ vars.MIN_VOL_OI }}
           AGGRESSIVE_LAST_TO_ASK:     ${{ vars.AGGRESSIVE_LAST_TO_ASK }}
+          HISTORY_MINUTES:     ${{ vars.HISTORY_MINUTES }}
         run: node index.mjs
 
       # 3) Commit & push only if there are changes
