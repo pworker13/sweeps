@@ -19,6 +19,9 @@ const MIN_PREMIUM_GOLDEN  = Number(process.env.MIN_PREMIUM_GOLDEN ?? 1_000_000);
 const MAX_DTE_GOLDEN      = Number(process.env.MAX_DTE_GOLDEN ?? 14);
 const MIN_VOL_OI          = Number(process.env.MIN_VOL_OI ?? 1.5);
 const AGGRESSIVE_LAST_ASK = Number(process.env.AGGRESSIVE_LAST_TO_ASK ?? 0.95);
+const CLUSTER_MIN_PREMIUM = Number(process.env.CLUSTER_MIN_PREMIUM ?? 3_000_000);
+const STRIKE_PCT_BAND     = Number(process.env.STRIKE_PCT_BAND ?? 5);
+const DATE_BAND_DAYS      = Number(process.env.DATE_BAND_DAYS ?? 7);
 
 const HISTORY_MINUTES = Number(process.env.HISTORY_MINUTES ?? 10);
 const WINDOW_MS = HISTORY_MINUTES * 60_000;
@@ -246,6 +249,60 @@ function normalizeRows(json) {
   return rows;
 }
 
+function findPremiumClusters(groups, strikePct, dayBand, minPremium, state) {
+  const arr = Array.from(groups.values());
+  const n = arr.length;
+  const parents = Array.from({ length: n }, (_, i) => i);
+  const find = (i) => (parents[i] === i ? i : (parents[i] = find(parents[i])));
+  const union = (a, b) => { a = find(a); b = find(b); if (a !== b) parents[b] = a; };
+
+  const strikes = arr.map(g => num(g.Strike));
+  const dtes = arr.map(g => daysToExpiry(g.ExpirationISO));
+  const pctBand = strikePct / 100;
+
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      const gi = arr[i], gj = arr[j];
+      if (gi.Symbol !== gj.Symbol || gi.Type !== gj.Type) continue;
+      const strikeDiffPct = Math.abs(strikes[i] - strikes[j]) / Math.min(strikes[i], strikes[j]);
+      if (strikeDiffPct > pctBand) continue;
+      if (Math.abs(dtes[i] - dtes[j]) > dayBand) continue;
+      union(i, j);
+    }
+  }
+
+  const byRoot = new Map();
+  for (let i = 0; i < n; i++) {
+    const root = find(i);
+    const g = arr[i];
+    let c = byRoot.get(root);
+    const strike = strikes[i];
+    const exp = g.ExpirationISO;
+    if (!c) {
+      c = {
+        symbol: g.Symbol,
+        type: g.Type,
+        strikeLo: strike,
+        strikeHi: strike,
+        expLo: exp,
+        expHi: exp,
+        premiumSum: 0,
+        keys: []
+      };
+      byRoot.set(root, c);
+    }
+    c.strikeLo = Math.min(c.strikeLo, strike);
+    c.strikeHi = Math.max(c.strikeHi, strike);
+    const t = Date.parse(exp);
+    if (Date.parse(c.expLo) > t) c.expLo = exp;
+    if (Date.parse(c.expHi) < t) c.expHi = exp;
+    c.premiumSum += g.premiumSum || 0;
+    c.keys.push(g.key);
+  }
+
+  return Array.from(byRoot.values()).filter(c => c.premiumSum >= minPremium && c.keys.length > 1);
+}
+
 async function main() {
   if (!WEBHOOK_LARGE && !WEBHOOK_GOLDEN) {
     log('ERROR: Configure WEBHOOK_LARGE / WEBHOOK_GOLDEN in .env');
@@ -336,6 +393,26 @@ async function main() {
     await postDiscord(WEBHOOK_GOLDEN, makeEmbed(cand, 'GOLDEN Sweep'));
     state.posted[g.key] = Date.now();
     for (const r of g.rows) if (r.rowKey) state.posted[r.rowKey] = Date.now();
+    posted++; await sleep(400);
+  }
+
+  const clusters = findPremiumClusters(groups, STRIKE_PCT_BAND, DATE_BAND_DAYS, CLUSTER_MIN_PREMIUM, state);
+  for (const c of clusters) {
+    const cKey = `${c.symbol}|${c.type}|${c.strikeLo}-${c.strikeHi}|${c.expLo}-${c.expHi}`;
+    if (state.posted[cKey]) { log('Skip duplicate (cluster):', cKey); continue; }
+    const embed = [{
+      title: `Premium Cluster: ${c.symbol} ${c.type}`,
+      color: c.type === 'Call' ? 0x2ecc71 : 0xe74c3c,
+      fields: [
+        { name: 'Strikes', value: `${c.strikeLo}-${c.strikeHi}`, inline: true },
+        { name: 'Expirations', value: `${fmtUS(c.expLo)} - ${fmtUS(c.expHi)}`, inline: true },
+        { name: 'Premium Sum ~$', value: c.premiumSum.toLocaleString(), inline: true },
+        { name: 'Link', value: `https://www.barchart.com/stocks/quotes/${c.symbol}/options`, inline: false }
+      ],
+      footer: { text: 'Source: Barchart Unusual Options (free)' }
+    }];
+    await postDiscord(WEBHOOK_GOLDEN, embed);
+    state.posted[cKey] = Date.now();
     posted++; await sleep(400);
   }
 
