@@ -296,7 +296,7 @@ function findPremiumClusters(groups, strikePct, dayBand, minPremium, state) {
     const t = Date.parse(exp);
     if (Date.parse(c.expLo) > t) c.expLo = exp;
     if (Date.parse(c.expHi) < t) c.expHi = exp;
-    c.premiumSum += g.premiumSum || 0;
+    c.premiumSum += g.premiumSum || g.Premium || 0;
     c.keys.push(g.key);
   }
 
