@@ -23,6 +23,9 @@ const CLUSTER_MIN_PREMIUM = Number(process.env.CLUSTER_MIN_PREMIUM ?? 3_000_000)
 const STRIKE_PCT_BAND     = Number(process.env.STRIKE_PCT_BAND ?? 5);
 const DATE_BAND_DAYS      = Number(process.env.DATE_BAND_DAYS ?? 7);
 
+// סף הקפיצה הנדרש לפרסום מחדש של cluster
+const CLUSTER_PREMIUM_JUMP = Number(process.env.CLUSTER_PREMIUM_JUMP ?? 200_000);
+
 const HISTORY_MINUTES = Number(process.env.HISTORY_MINUTES ?? 10);
 const WINDOW_MS = HISTORY_MINUTES * 60_000;
 
@@ -58,15 +61,20 @@ const daysToExpiry = (iso) => {
 async function loadState() {
   try {
     const j = JSON.parse(await fs.readFile(STATE_FILE, 'utf8'));
-    return { posted: j.posted || {}, recent: Array.isArray(j.recent) ? j.recent : [] };
+    return { 
+      posted: j.posted || {}, 
+      recent: Array.isArray(j.recent) ? j.recent : [],
+      clusterData: j.clusterData || {} // שומר premium + timestamp + hash של העסקאות
+    };
   } catch {
-    return { posted: {}, recent: [] };
+    return { posted: {}, recent: [], clusterData: {} };
   }
 }
 async function saveState(state) {
   await fs.writeFile(STATE_FILE, JSON.stringify({
     posted: state.posted,
-    recent: state.recent
+    recent: state.recent,
+    clusterData: state.clusterData
   }, null, 2));
 }
 
@@ -111,7 +119,6 @@ async function postDiscord(webhook, embeds) {
   log('Discord response', res.status, res.statusText);
 }
 
-// ------------ FIXED: robust XHR capture with fallback -------------
 async function fetchGridJson(page) {
   log('Navigating to', BARCHART_URL);
   await page.goto(BARCHART_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
@@ -207,7 +214,6 @@ async function fetchGridJson(page) {
 
   return capturedJson;
 }
-// ---------------------------------------------------------------
 
 function normalizeRows(json) {
   const src = Array.isArray(json?.data) ? json.data : [];
@@ -287,7 +293,8 @@ function findPremiumClusters(groups, strikePct, dayBand, minPremium, state) {
         expLo: exp,
         expHi: exp,
         premiumSum: 0,
-        keys: []
+        keys: [],
+        rowKeys: [] // שמירת rowKeys לבדיקה אם יש עסקאות חדשות
       };
       byRoot.set(root, c);
     }
@@ -296,8 +303,10 @@ function findPremiumClusters(groups, strikePct, dayBand, minPremium, state) {
     const t = Date.parse(exp);
     if (Date.parse(c.expLo) > t) c.expLo = exp;
     if (Date.parse(c.expHi) < t) c.expHi = exp;
-    c.premiumSum += g.premiumSum || g.Premium || 0;
+    c.premiumSum += g.premiumSum || 0;
     c.keys.push(g.key);
+    // אוסף את כל ה-rowKeys של העסקאות בקלאסטר
+    c.rowKeys.push(...g.rows.map(r => r.rowKey));
   }
 
   return Array.from(byRoot.values()).filter(c => c.premiumSum >= minPremium && c.keys.length > 1);
@@ -311,6 +320,7 @@ async function main() {
 
   const state = await loadState();
   log('Loaded state entries:', Object.keys(state.posted).length);
+  log('Loaded cluster data:', Object.keys(state.clusterData).length);
 
   log('Launching Firefox (headed)…');
   const browser = await firefox.launch({ headless: true });
@@ -326,7 +336,6 @@ async function main() {
     log('fetchGridJson ERROR:', e.message);
   }
 
-  // give you time to inspect the page
   try { await page.waitForTimeout(10_000); } catch {}
   await browser.close();
   log('Browser closed');
@@ -397,44 +406,83 @@ async function main() {
   }
 
   const clusters = findPremiumClusters(groups, STRIKE_PCT_BAND, DATE_BAND_DAYS, CLUSTER_MIN_PREMIUM, state);
-	for (const c of clusters) {
-	  const cKey = `${c.symbol}|${c.type}|${c.strikeLo}-${c.strikeHi}|${c.expLo}-${c.expHi}`;
-	  if (!state.lastPremium) state.lastPremium = {};
-	  const prevPremium = state.lastPremium[cKey] ?? 0;
-	  const diff = c.premiumSum - prevPremium;
-
-	  // אם כבר פורסם בעבר ועדיין לא עלה ב-200k – דלג
-	  if (state.posted[cKey] && diff < MIN_PREMIUM_LARGE) {
-		log(`Skip cluster (Δ ${diff.toLocaleString()}) below threshold:`, cKey);
-		continue;
-	  }
-
-	  // 🔹 עדכון מיידי של הפרמיה הנוכחית כדי למנוע פרסום חוזר
-	  state.lastPremium[cKey] = c.premiumSum;
-	  state.posted[cKey] = Date.now();
-
-	  // פרסום בפועל
-	  const embed = [{
-		title: `Premium Cluster: ${c.symbol} ${c.type}`,
-		color: c.type === 'Call' ? 0x2ecc71 : 0xe74c3c,
-		fields: [
-		  { name: 'Strikes', value: `${c.strikeLo}-${c.strikeHi}`, inline: true },
-		  { name: 'Expirations', value: `${fmtUS(c.expLo)} - ${fmtUS(c.expHi)}`, inline: true },
-		  { name: 'Premium Sum ~$', value: c.premiumSum.toLocaleString(), inline: true },
-		  { name: 'Δ Premium', value: diff > 0 ? `+${diff.toLocaleString()}` : diff.toLocaleString(), inline: true },
-		  { name: 'Link', value: `https://www.barchart.com/stocks/quotes/${c.symbol}/options`, inline: false }
-		],
-		footer: { text: 'Source: Barchart Unusual Options (free)' }
-	  }];
-
-	  await postDiscord(WEBHOOK_GOLDEN, embed);
-	  posted++;
-	  await sleep(400);
-	}
-  
+  for (const c of clusters) {
+    const cKey = `${c.symbol}|${c.type}|${c.strikeLo}-${c.strikeHi}|${c.expLo}-${c.expHi}`;
+    
+    const lastData = state.clusterData[cKey];
+    let shouldPost = false;
+    let reasonLog = '';
+    
+    if (!lastData) {
+      // cluster חדש - פרסם
+      shouldPost = true;
+      reasonLog = 'new cluster';
+    } else {
+      // בדיקה אם יש עסקאות חדשות שלא היו בפרסום האחרון
+      const lastRowKeysSet = new Set(lastData.rowKeys || []);
+      const newTrades = c.rowKeys.filter(rk => !lastRowKeysSet.has(rk));
+      
+      if (newTrades.length === 0) {
+        // אין עסקאות חדשות - לא לפרסם
+        shouldPost = false;
+        reasonLog = `no new trades (${c.rowKeys.length} existing trades)`;
+      } else {
+        // יש עסקאות חדשות - בדיקה אם הפרמיה קפצה מספיק
+        const premiumJump = c.premiumSum - lastData.premium;
+        
+        if (premiumJump >= CLUSTER_PREMIUM_JUMP) {
+          shouldPost = true;
+          reasonLog = `premium jump ${premiumJump.toLocaleString()} with ${newTrades.length} new trades`;
+        } else {
+          shouldPost = false;
+          reasonLog = `insufficient jump ${premiumJump.toLocaleString()} (${newTrades.length} new trades)`;
+        }
+      }
+    }
+    
+    if (!shouldPost) {
+      log(`Skip cluster ${cKey}: ${reasonLog}`);
+      continue;
+    }
+    
+    // פרסום
+    const embed = [{
+      title: `Premium Cluster: ${c.symbol} ${c.type}`,
+      color: c.type === 'Call' ? 0x2ecc71 : 0xe74c3c,
+      fields: [
+        { name: 'Strikes', value: `${c.strikeLo}-${c.strikeHi}`, inline: true },
+        { name: 'Expirations', value: `${fmtUS(c.expLo)} - ${fmtUS(c.expHi)}`, inline: true },
+        { name: 'Premium Sum ~$', value: c.premiumSum.toLocaleString(), inline: true },
+        { name: 'Link', value: `https://www.barchart.com/stocks/quotes/${c.symbol}/options`, inline: false }
+      ],
+      footer: { text: 'Source: Barchart Unusual Options (free)' }
+    }];
+    
+    await postDiscord(WEBHOOK_GOLDEN, embed);
+    state.posted[cKey] = Date.now();
+    
+    // שמירת הנתונים של הפרסום
+    state.clusterData[cKey] = {
+      premium: c.premiumSum,
+      timestamp: Date.now(),
+      rowKeys: c.rowKeys
+    };
+    
+    log(`Posted cluster ${cKey}: ${reasonLog}`);
+    posted++; await sleep(400);
+  }
 
   const cutoff = Date.now() - 2 * 86400000;
   for (const [k, ts] of Object.entries(state.posted)) if (ts < cutoff) delete state.posted[k];
+  
+  // ניקוי נתוני clusters ישנים (יותר מ-7 ימים)
+  const dataCutoff = Date.now() - 7 * 86400000;
+  for (const [k, data] of Object.entries(state.clusterData)) {
+    if (data.timestamp < dataCutoff) {
+      delete state.clusterData[k];
+    }
+  }
+  
   await saveState(state);
 
   log(`DONE. Parsed:${rows.length} Posted:${posted}`);
