@@ -397,36 +397,40 @@ async function main() {
   }
 
   const clusters = findPremiumClusters(groups, STRIKE_PCT_BAND, DATE_BAND_DAYS, CLUSTER_MIN_PREMIUM, state);
-  for (const c of clusters) {
-    const cKey = `${c.symbol}|${c.type}|${c.strikeLo}-${c.strikeHi}|${c.expLo}-${c.expHi}`;
-    const prev = state.posted[cKey];          // שמירת הפעם האחרונה
-    const prevPremium = state.lastPremium?.[cKey] ?? 0; // פרמיה קודמת ששמרנו
-    const diff = c.premiumSum - prevPremium;
-  
-    // תנאי חדש: רק אם עלתה ביותר מ-200k או לא פורסם קודם
-    if (prev && diff < MIN_PREMIUM_LARGE) {
-      log(`Skip cluster (Δ ${diff.toLocaleString()}) below threshold:`, cKey);
-      continue;
-    }
-  
-    const embed = [{
-      title: `Premium Cluster: ${c.symbol} ${c.type}`,
-      color: c.type === 'Call' ? 0x2ecc71 : 0xe74c3c,
-      fields: [
-        { name: 'Strikes', value: `${c.strikeLo}-${c.strikeHi}`, inline: true },
-        { name: 'Expirations', value: `${fmtUS(c.expLo)} - ${fmtUS(c.expHi)}`, inline: true },
-        { name: 'Premium Sum ~$', value: c.premiumSum.toLocaleString(), inline: true },
-        { name: 'Δ Premium', value: diff > 0 ? `+${diff.toLocaleString()}` : diff.toLocaleString(), inline: true },
-        { name: 'Link', value: `https://www.barchart.com/stocks/quotes/${c.symbol}/options`, inline: false }
-      ],
-      footer: { text: 'Source: Barchart Unusual Options (free)' }
-    }];
-    await postDiscord(WEBHOOK_GOLDEN, embed);
-    state.posted[cKey] = Date.now();
-    if (!state.lastPremium) state.lastPremium = {};
-    state.lastPremium[cKey] = c.premiumSum; // נשמור את הפרמיה האחרונה
-    posted++; await sleep(400);
-  }
+	for (const c of clusters) {
+	  const cKey = `${c.symbol}|${c.type}|${c.strikeLo}-${c.strikeHi}|${c.expLo}-${c.expHi}`;
+	  if (!state.lastPremium) state.lastPremium = {};
+	  const prevPremium = state.lastPremium[cKey] ?? 0;
+	  const diff = c.premiumSum - prevPremium;
+
+	  // אם כבר פורסם בעבר ועדיין לא עלה ב-200k – דלג
+	  if (state.posted[cKey] && diff < MIN_PREMIUM_LARGE) {
+		log(`Skip cluster (Δ ${diff.toLocaleString()}) below threshold:`, cKey);
+		continue;
+	  }
+
+	  // 🔹 עדכון מיידי של הפרמיה הנוכחית כדי למנוע פרסום חוזר
+	  state.lastPremium[cKey] = c.premiumSum;
+	  state.posted[cKey] = Date.now();
+
+	  // פרסום בפועל
+	  const embed = [{
+		title: `Premium Cluster: ${c.symbol} ${c.type}`,
+		color: c.type === 'Call' ? 0x2ecc71 : 0xe74c3c,
+		fields: [
+		  { name: 'Strikes', value: `${c.strikeLo}-${c.strikeHi}`, inline: true },
+		  { name: 'Expirations', value: `${fmtUS(c.expLo)} - ${fmtUS(c.expHi)}`, inline: true },
+		  { name: 'Premium Sum ~$', value: c.premiumSum.toLocaleString(), inline: true },
+		  { name: 'Δ Premium', value: diff > 0 ? `+${diff.toLocaleString()}` : diff.toLocaleString(), inline: true },
+		  { name: 'Link', value: `https://www.barchart.com/stocks/quotes/${c.symbol}/options`, inline: false }
+		],
+		footer: { text: 'Source: Barchart Unusual Options (free)' }
+	  }];
+
+	  await postDiscord(WEBHOOK_GOLDEN, embed);
+	  posted++;
+	  await sleep(400);
+	}
   
 
   const cutoff = Date.now() - 2 * 86400000;
