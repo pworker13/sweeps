@@ -308,7 +308,14 @@
     "HIMS|Put|18|02/13/26|15:59 ET|0.45|9917": 1770673563111,
     "AAPL|Call|270|02/09/26|15:58 ET|4.95|4788": 1770673563712,
     "AAPL|Call|272.5|02/09/26|15:58 ET|2.5|45235": 1770673564314,
-    "AAPL|Call|270-275|02/09/26-02/11/26": 1770673565474
+    "AAPL|Call|270-275|02/09/26-02/11/26": 1770673565474,
+    "AMD|Put|187.5|02/20/26|15:59 ET|1.14|63638": 1770674463029,
+    "HIMS|Call|20|02/13/26|15:59 ET|0.73|20024": 1770674463634,
+    "HIMS|Call|20|03/20/26|15:59 ET|2.69|8192": 1770674464256,
+    "HIMS|Put|18|02/13/26|15:59 ET|0.47|9928": 1770674464819,
+    "HIMS|Call|19|02/13/26|15:59 ET|1.16|7899": 1770674465544,
+    "MSFT|Call|412.5|02/09/26|15:59 ET|1.12|26826": 1770674466229,
+    "SPOT|Call|460|02/13/26|15:59 ET|5.2|4373": 1770674466944
   },
   "recent": [
     {
@@ -316,17 +323,17 @@
       "Type": "Put",
       "Strike": "187.5",
       "ExpirationISO": "02/20/26",
-      "Bid": 1.12,
+      "Bid": 1.08,
       "Ask": 1.16,
-      "Last": 1.13,
-      "Volume": 63625,
+      "Last": 1.14,
+      "Volume": 63638,
       "OI": 309,
-      "VolOI": 205.91,
-      "Premium": 7189625,
-      "Moneyness": "-13.16%",
-      "Time": "15:58 ET",
-      "rowKey": "AMD|Put|187.5|02/20/26|15:58 ET|1.13|63625",
-      "ts": 1770673556447
+      "VolOI": 205.95,
+      "Premium": 7254732,
+      "Moneyness": "-13.19%",
+      "Time": "15:59 ET",
+      "rowKey": "AMD|Put|187.5|02/20/26|15:59 ET|1.14|63638",
+      "ts": 1770674462169
     },
     {
       "Symbol": "RIG",
@@ -340,10 +347,10 @@
       "OI": 161,
       "VolOI": 196.4,
       "Premium": 6197716,
-      "Moneyness": "+22.38%",
+      "Moneyness": "+22.59%",
       "Time": "15:41 ET",
       "rowKey": "RIG|Put|7|01/15/27|15:41 ET|1.96|31621",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "HIMS",
@@ -352,15 +359,15 @@
       "ExpirationISO": "02/13/26",
       "Bid": 0.7,
       "Ask": 0.73,
-      "Last": 0.72,
-      "Volume": 19970,
+      "Last": 0.73,
+      "Volume": 20024,
       "OI": 169,
-      "VolOI": 118.17,
-      "Premium": 1437840,
-      "Moneyness": "-4.38%",
+      "VolOI": 118.49,
+      "Premium": 1461752,
+      "Moneyness": "-3.47%",
       "Time": "15:59 ET",
-      "rowKey": "HIMS|Call|20|02/13/26|15:59 ET|0.72|19970",
-      "ts": 1770673556447
+      "rowKey": "HIMS|Call|20|02/13/26|15:59 ET|0.73|20024",
+      "ts": 1770674462169
     },
     {
       "Symbol": "NVDA",
@@ -374,10 +381,10 @@
       "OI": 1795,
       "VolOI": 102.97,
       "Premium": 3326814,
-      "Moneyness": "+0.14%",
+      "Moneyness": "+0.07%",
       "Time": "15:59 ET",
       "rowKey": "NVDA|Put|190|02/09/26|15:59 ET|0.18|184823",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "GT",
@@ -391,10 +398,10 @@
       "OI": 199,
       "VolOI": 102.44,
       "Premium": 346545,
-      "Moneyness": "-13.74%",
+      "Moneyness": "-13.96%",
       "Time": "15:58 ET",
       "rowKey": "GT|Call|12|02/20/26|15:58 ET|0.17|20385",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "TSLA",
@@ -408,10 +415,10 @@
       "OI": 669,
       "VolOI": 100.6,
       "Premium": 1615248,
-      "Moneyness": "-0.52%",
+      "Moneyness": "+0.08%",
       "Time": "15:59 ET",
       "rowKey": "TSLA|Put|417.5|02/09/26|15:59 ET|0.24|67302",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "WULF",
@@ -425,10 +432,27 @@
       "OI": 183,
       "VolOI": 79.69,
       "Premium": 568776,
-      "Moneyness": "-7.91%",
+      "Moneyness": "-8.11%",
       "Time": "15:59 ET",
       "rowKey": "WULF|Call|18|02/13/26|15:59 ET|0.39|14584",
-      "ts": 1770673556447
+      "ts": 1770674462169
+    },
+    {
+      "Symbol": "HIMS",
+      "Type": "Call",
+      "Strike": "18",
+      "ExpirationISO": "02/13/26",
+      "Bid": 1.77,
+      "Ask": 1.91,
+      "Last": 1.81,
+      "Volume": 15752,
+      "OI": 210,
+      "VolOI": 75.01,
+      "Premium": 2851112,
+      "Moneyness": "+6.88%",
+      "Time": "15:59 ET",
+      "rowKey": "HIMS|Call|18|02/13/26|15:59 ET|1.81|15752",
+      "ts": 1770674462169
     },
     {
       "Symbol": "LVS",
@@ -436,33 +460,16 @@
       "Strike": "50",
       "ExpirationISO": "06/18/26",
       "Bid": 9.8,
-      "Ask": 10.1,
+      "Ask": 10.05,
       "Last": 10,
       "Volume": 28611,
       "OI": 382,
       "VolOI": 74.9,
       "Premium": 28611000,
-      "Moneyness": "+12.59%",
+      "Moneyness": "+12.56%",
       "Time": "15:53 ET",
       "rowKey": "LVS|Call|50|06/18/26|15:53 ET|10|28611",
-      "ts": 1770673556447
-    },
-    {
-      "Symbol": "HIMS",
-      "Type": "Call",
-      "Strike": "18",
-      "ExpirationISO": "02/13/26",
-      "Bid": 1.75,
-      "Ask": 1.85,
-      "Last": 1.8,
-      "Volume": 15672,
-      "OI": 210,
-      "VolOI": 74.63,
-      "Premium": 2820960,
-      "Moneyness": "+6.05%",
-      "Time": "15:59 ET",
-      "rowKey": "HIMS|Call|18|02/13/26|15:59 ET|1.8|15672",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "RIG",
@@ -476,10 +483,10 @@
       "OI": 149,
       "VolOI": 74.05,
       "Premium": 2228868,
-      "Moneyness": "+22.38%",
+      "Moneyness": "+22.59%",
       "Time": "15:46 ET",
       "rowKey": "RIG|Put|7|12/18/26|15:46 ET|2.02|11034",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "CCL",
@@ -493,61 +500,61 @@
       "OI": 135,
       "VolOI": 71.99,
       "Premium": 2361717,
-      "Moneyness": "-8.68%",
+      "Moneyness": "-8.56%",
       "Time": "13:33 ET",
       "rowKey": "CCL|Call|30|07/17/26|13:33 ET|2.43|9719",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "IREN",
       "Type": "Call",
       "Strike": "44.5",
       "ExpirationISO": "02/13/26",
-      "Bid": 3.2,
-      "Ask": 3.45,
+      "Bid": 3.15,
+      "Ask": 3.65,
       "Last": 4.2,
       "Volume": 10114,
       "OI": 143,
       "VolOI": 70.73,
       "Premium": 4247880,
-      "Moneyness": "+5.08%",
+      "Moneyness": "+3.58%",
       "Time": "15:40 ET",
       "rowKey": "IREN|Call|44.5|02/13/26|15:40 ET|4.2|10114",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "META",
       "Type": "Put",
       "Strike": "680",
       "ExpirationISO": "02/09/26",
-      "Bid": 2.09,
-      "Ask": 2.38,
+      "Bid": 2.48,
+      "Ask": 3.85,
       "Last": 2.22,
       "Volume": 12684,
       "OI": 191,
       "VolOI": 66.41,
       "Premium": 2815848,
-      "Moneyness": "+0.07%",
+      "Moneyness": "+0.39%",
       "Time": "15:59 ET",
       "rowKey": "META|Put|680|02/09/26|15:59 ET|2.22|12684",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "CRCL",
       "Type": "Call",
       "Strike": "64",
       "ExpirationISO": "02/13/26",
-      "Bid": 0.82,
+      "Bid": 0.83,
       "Ask": 0.93,
       "Last": 0.92,
       "Volume": 15929,
       "OI": 291,
       "VolOI": 54.74,
       "Premium": 1465468,
-      "Moneyness": "-6.38%",
+      "Moneyness": "-6.49%",
       "Time": "15:56 ET",
       "rowKey": "CRCL|Call|64|02/13/26|15:56 ET|0.92|15929",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "WYNN",
@@ -561,27 +568,27 @@
       "OI": 113,
       "VolOI": 52.39,
       "Premium": 1480000,
-      "Moneyness": "-2.56%",
+      "Moneyness": "-2.62%",
       "Time": "15:59 ET",
       "rowKey": "WYNN|Call|120|02/13/26|15:59 ET|2.5|5920",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "HIMS",
       "Type": "Call",
       "Strike": "20",
       "ExpirationISO": "03/20/26",
-      "Bid": 2.65,
-      "Ask": 2.68,
-      "Last": 2.65,
-      "Volume": 8190,
+      "Bid": 2.6,
+      "Ask": 2.71,
+      "Last": 2.69,
+      "Volume": 8192,
       "OI": 159,
-      "VolOI": 51.51,
-      "Premium": 2170350,
-      "Moneyness": "-4.38%",
+      "VolOI": 51.52,
+      "Premium": 2203648,
+      "Moneyness": "-3.47%",
       "Time": "15:59 ET",
-      "rowKey": "HIMS|Call|20|03/20/26|15:59 ET|2.65|8190",
-      "ts": 1770673556447
+      "rowKey": "HIMS|Call|20|03/20/26|15:59 ET|2.69|8192",
+      "ts": 1770674462169
     },
     {
       "Symbol": "TSLA",
@@ -595,10 +602,10 @@
       "OI": 1781,
       "VolOI": 48.22,
       "Premium": 21382626,
-      "Moneyness": "+0.08%",
+      "Moneyness": "+0.68%",
       "Time": "15:59 ET",
       "rowKey": "TSLA|Put|420|02/09/26|15:59 ET|2.49|85874",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "TSLA",
@@ -612,10 +619,10 @@
       "OI": 980,
       "VolOI": 47.9,
       "Premium": 563316,
-      "Moneyness": "+0.52%",
+      "Moneyness": "-0.08%",
       "Time": "15:59 ET",
       "rowKey": "TSLA|Call|417.5|02/09/26|15:59 ET|0.12|46943",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "RVMD",
@@ -629,10 +636,10 @@
       "OI": 168,
       "VolOI": 44.67,
       "Premium": 4503000,
-      "Moneyness": "-17.47%",
+      "Moneyness": "-17.30%",
       "Time": "12:44 ET",
       "rowKey": "RVMD|Put|80|06/18/26|12:44 ET|6|7505",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "WULF",
@@ -646,10 +653,10 @@
       "OI": 124,
       "VolOI": 44.39,
       "Premium": 2256640,
-      "Moneyness": "-13.91%",
+      "Moneyness": "-14.11%",
       "Time": "15:57 ET",
       "rowKey": "WULF|Call|19|08/21/26|15:57 ET|4.1|5504",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "COIN",
@@ -663,10 +670,10 @@
       "OI": 296,
       "VolOI": 43.53,
       "Premium": 24479600,
-      "Moneyness": "-1.99%",
+      "Moneyness": "-1.64%",
       "Time": "15:52 ET",
       "rowKey": "COIN|Call|170|04/17/26|15:52 ET|19|12884",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "TDC",
@@ -680,44 +687,44 @@
       "OI": 197,
       "VolOI": 41.97,
       "Premium": 1198860,
-      "Moneyness": "-6.46%",
+      "Moneyness": "-6.04%",
       "Time": "15:59 ET",
       "rowKey": "TDC|Call|30|02/20/26|15:59 ET|1.45|8268",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "HIMS",
       "Type": "Put",
       "Strike": "18",
       "ExpirationISO": "02/13/26",
-      "Bid": 0.45,
-      "Ask": 0.46,
-      "Last": 0.45,
-      "Volume": 9917,
+      "Bid": 0.47,
+      "Ask": 0.48,
+      "Last": 0.47,
+      "Volume": 9928,
       "OI": 242,
-      "VolOI": 40.98,
-      "Premium": 446265,
-      "Moneyness": "-6.05%",
+      "VolOI": 41.02,
+      "Premium": 466616,
+      "Moneyness": "-6.88%",
       "Time": "15:59 ET",
-      "rowKey": "HIMS|Put|18|02/13/26|15:59 ET|0.45|9917",
-      "ts": 1770673556447
+      "rowKey": "HIMS|Put|18|02/13/26|15:59 ET|0.47|9928",
+      "ts": 1770674462169
     },
     {
       "Symbol": "HIMS",
       "Type": "Call",
       "Strike": "19",
       "ExpirationISO": "02/13/26",
-      "Bid": 1.15,
-      "Ask": 1.24,
-      "Last": 1.17,
-      "Volume": 7846,
+      "Bid": 1.16,
+      "Ask": 1.2,
+      "Last": 1.16,
+      "Volume": 7899,
       "OI": 219,
-      "VolOI": 35.83,
-      "Premium": 917982,
-      "Moneyness": "+0.84%",
+      "VolOI": 36.07,
+      "Premium": 916284,
+      "Moneyness": "+1.71%",
       "Time": "15:59 ET",
-      "rowKey": "HIMS|Call|19|02/13/26|15:59 ET|1.17|7846",
-      "ts": 1770673556447
+      "rowKey": "HIMS|Call|19|02/13/26|15:59 ET|1.16|7899",
+      "ts": 1770674462169
     },
     {
       "Symbol": "HL",
@@ -731,78 +738,78 @@
       "OI": 149,
       "VolOI": 35.05,
       "Premium": 125328,
-      "Moneyness": "-10.42%",
+      "Moneyness": "-10.69%",
       "Time": "15:36 ET",
       "rowKey": "HL|Call|26.5|02/13/26|15:36 ET|0.24|5222",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "BSX",
       "Type": "Put",
       "Strike": "65",
       "ExpirationISO": "04/17/26",
-      "Bid": 0.45,
+      "Bid": 0.55,
       "Ask": 1,
       "Last": 0.69,
       "Volume": 3519,
       "OI": 109,
       "VolOI": 32.28,
       "Premium": 242811,
-      "Moneyness": "-12.75%",
+      "Moneyness": "-12.30%",
       "Time": "13:33 ET",
       "rowKey": "BSX|Put|65|04/17/26|13:33 ET|0.69|3519",
-      "ts": 1770673556447
-    },
-    {
-      "Symbol": "AAPL",
-      "Type": "Call",
-      "Strike": "270",
-      "ExpirationISO": "02/09/26",
-      "Bid": 4.85,
-      "Ask": 5,
-      "Last": 4.95,
-      "Volume": 4788,
-      "OI": 151,
-      "VolOI": 31.71,
-      "Premium": 2370060,
-      "Moneyness": "+1.44%",
-      "Time": "15:58 ET",
-      "rowKey": "AAPL|Call|270|02/09/26|15:58 ET|4.95|4788",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "MSFT",
       "Type": "Call",
       "Strike": "412.5",
       "ExpirationISO": "02/09/26",
-      "Bid": 1.52,
-      "Ask": 1.68,
-      "Last": 1.58,
-      "Volume": 26789,
+      "Bid": 0.93,
+      "Ask": 1.16,
+      "Last": 1.12,
+      "Volume": 26826,
       "OI": 846,
-      "VolOI": 31.67,
-      "Premium": 4232662,
-      "Moneyness": "+0.03%",
+      "VolOI": 31.71,
+      "Premium": 3004512,
+      "Moneyness": "+0.29%",
+      "Time": "15:59 ET",
+      "rowKey": "MSFT|Call|412.5|02/09/26|15:59 ET|1.12|26826",
+      "ts": 1770674462169
+    },
+    {
+      "Symbol": "AAPL",
+      "Type": "Call",
+      "Strike": "270",
+      "ExpirationISO": "02/09/26",
+      "Bid": 3.7,
+      "Ask": 5.55,
+      "Last": 4.95,
+      "Volume": 4788,
+      "OI": 151,
+      "VolOI": 31.71,
+      "Premium": 2370060,
+      "Moneyness": "+1.68%",
       "Time": "15:58 ET",
-      "rowKey": "MSFT|Call|412.5|02/09/26|15:58 ET|1.58|26789",
-      "ts": 1770673556447
+      "rowKey": "AAPL|Call|270|02/09/26|15:58 ET|4.95|4788",
+      "ts": 1770674462169
     },
     {
       "Symbol": "ENVX",
       "Type": "Call",
       "Strike": "7",
       "ExpirationISO": "03/20/26",
-      "Bid": 0.52,
-      "Ask": 0.75,
+      "Bid": 0.55,
+      "Ask": 0.74,
       "Last": 0.67,
       "Volume": 10021,
       "OI": 321,
       "VolOI": 31.22,
       "Premium": 671407,
-      "Moneyness": "-9.55%",
+      "Moneyness": "-8.02%",
       "Time": "15:57 ET",
       "rowKey": "ENVX|Call|7|03/20/26|15:57 ET|0.67|10021",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "NMRA",
@@ -816,27 +823,27 @@
       "OI": 164,
       "VolOI": 31.15,
       "Premium": 485355,
-      "Moneyness": "-5.49%",
+      "Moneyness": "-4.60%",
       "Time": "14:57 ET",
       "rowKey": "NMRA|Call|2.5|07/17/26|14:57 ET|0.95|5109",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "AAPL",
       "Type": "Call",
       "Strike": "272.5",
       "ExpirationISO": "02/09/26",
-      "Bid": 2.35,
-      "Ask": 2.46,
-      "Last": 2.5,
-      "Volume": 45235,
+      "Bid": 1.18,
+      "Ask": 2.31,
+      "Last": 2.07,
+      "Volume": 45241,
       "OI": 1493,
       "VolOI": 30.3,
-      "Premium": 11308750,
-      "Moneyness": "+0.53%",
-      "Time": "15:58 ET",
-      "rowKey": "AAPL|Call|272.5|02/09/26|15:58 ET|2.5|45235",
-      "ts": 1770673556447
+      "Premium": 9364887,
+      "Moneyness": "+0.77%",
+      "Time": "15:59 ET",
+      "rowKey": "AAPL|Call|272.5|02/09/26|15:59 ET|2.07|45241",
+      "ts": 1770674462169
     },
     {
       "Symbol": "SPOT",
@@ -850,10 +857,10 @@
       "OI": 152,
       "VolOI": 28.77,
       "Premium": 2273960,
-      "Moneyness": "-10.69%",
+      "Moneyness": "-10.89%",
       "Time": "15:59 ET",
       "rowKey": "SPOT|Call|460|02/13/26|15:59 ET|5.2|4373",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "TRV",
@@ -867,10 +874,10 @@
       "OI": 240,
       "VolOI": 28.25,
       "Premium": 2712000,
-      "Moneyness": "-0.78%",
+      "Moneyness": "-0.96%",
       "Time": "15:59 ET",
       "rowKey": "TRV|Put|290|02/20/26|15:59 ET|4|6780",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "STNE",
@@ -884,27 +891,27 @@
       "OI": 215,
       "VolOI": 27.91,
       "Premium": 882000,
-      "Moneyness": "-11.46%",
+      "Moneyness": "-11.06%",
       "Time": "11:29 ET",
       "rowKey": "STNE|Put|16|07/17/26|11:29 ET|1.47|6000",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "AMZN",
       "Type": "Put",
       "Strike": "212.5",
       "ExpirationISO": "02/11/26",
-      "Bid": 4.4,
-      "Ask": 4.5,
-      "Last": 4.55,
-      "Volume": 4256,
+      "Bid": 4.6,
+      "Ask": 4.75,
+      "Last": 4.52,
+      "Volume": 4258,
       "OI": 155,
-      "VolOI": 27.46,
-      "Premium": 1936480,
-      "Moneyness": "+1.54%",
-      "Time": "15:58 ET",
-      "rowKey": "AMZN|Put|212.5|02/11/26|15:58 ET|4.55|4256",
-      "ts": 1770673556447
+      "VolOI": 27.47,
+      "Premium": 1924616,
+      "Moneyness": "+1.81%",
+      "Time": "15:59 ET",
+      "rowKey": "AMZN|Put|212.5|02/11/26|15:59 ET|4.52|4258",
+      "ts": 1770674462169
     },
     {
       "Symbol": "NFLX",
@@ -918,10 +925,10 @@
       "OI": 494,
       "VolOI": 27.44,
       "Premium": 2142006,
-      "Moneyness": "-16.29%",
+      "Moneyness": "-16.47%",
       "Time": "15:56 ET",
       "rowKey": "NFLX|Put|68|05/15/26|15:56 ET|1.58|13557",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "SHOP",
@@ -935,10 +942,10 @@
       "OI": 174,
       "VolOI": 27.42,
       "Premium": 424619,
-      "Moneyness": "-22.71%",
+      "Moneyness": "-23.31%",
       "Time": "15:56 ET",
       "rowKey": "SHOP|Call|146|02/20/26|15:56 ET|0.89|4771",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "TSLA",
@@ -952,27 +959,27 @@
       "OI": 235,
       "VolOI": 25.91,
       "Premium": 8317574,
-      "Moneyness": "+2.46%",
+      "Moneyness": "+3.08%",
       "Time": "15:59 ET",
       "rowKey": "TSLA|Put|430|02/11/26|15:59 ET|13.66|6089",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "AAPL",
       "Type": "Call",
       "Strike": "275",
       "ExpirationISO": "02/11/26",
-      "Bid": 2.06,
-      "Ask": 2.08,
-      "Last": 2.06,
-      "Volume": 26832,
+      "Bid": 1.73,
+      "Ask": 1.88,
+      "Last": 1.86,
+      "Volume": 26966,
       "OI": 1059,
-      "VolOI": 25.34,
-      "Premium": 5527392,
-      "Moneyness": "-0.39%",
+      "VolOI": 25.46,
+      "Premium": 5015676,
+      "Moneyness": "-0.14%",
       "Time": "15:59 ET",
-      "rowKey": "AAPL|Call|275|02/11/26|15:59 ET|2.06|26832",
-      "ts": 1770673556447
+      "rowKey": "AAPL|Call|275|02/11/26|15:59 ET|1.86|26966",
+      "ts": 1770674462169
     },
     {
       "Symbol": "HITI",
@@ -981,15 +988,15 @@
       "ExpirationISO": "02/20/26",
       "Bid": 0.1,
       "Ask": 0.15,
-      "Last": 0.15,
-      "Volume": 11218,
+      "Last": 0.13,
+      "Volume": 11219,
       "OI": 444,
       "VolOI": 25.27,
-      "Premium": 168270,
-      "Moneyness": "-3.73%",
+      "Premium": 145847,
+      "Moneyness": "-3.31%",
       "Time": "15:59 ET",
-      "rowKey": "HITI|Call|2.5|02/20/26|15:59 ET|0.15|11218",
-      "ts": 1770673556447
+      "rowKey": "HITI|Call|2.5|02/20/26|15:59 ET|0.13|11219",
+      "ts": 1770674462169
     },
     {
       "Symbol": "RVMD",
@@ -1003,27 +1010,27 @@
       "OI": 300,
       "VolOI": 25,
       "Premium": 525000,
-      "Moneyness": "-48.42%",
+      "Moneyness": "-48.32%",
       "Time": "11:02 ET",
       "rowKey": "RVMD|Put|50|06/18/26|11:02 ET|0.7|7500",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "HIMS",
       "Type": "Call",
       "Strike": "20",
       "ExpirationISO": "02/20/26",
-      "Bid": 1.14,
-      "Ask": 1.16,
-      "Last": 1.16,
-      "Volume": 6543,
+      "Bid": 1.13,
+      "Ask": 1.18,
+      "Last": 1.15,
+      "Volume": 6556,
       "OI": 264,
-      "VolOI": 24.78,
-      "Premium": 758988,
-      "Moneyness": "-4.38%",
+      "VolOI": 24.83,
+      "Premium": 753940,
+      "Moneyness": "-3.47%",
       "Time": "15:59 ET",
-      "rowKey": "HIMS|Call|20|02/20/26|15:59 ET|1.16|6543",
-      "ts": 1770673556447
+      "rowKey": "HIMS|Call|20|02/20/26|15:59 ET|1.15|6556",
+      "ts": 1770674462169
     },
     {
       "Symbol": "NVDA",
@@ -1037,10 +1044,10 @@
       "OI": 4091,
       "VolOI": 24.34,
       "Premium": 6571092,
-      "Moneyness": "-9.36%",
+      "Moneyness": "-9.29%",
       "Time": "15:59 ET",
       "rowKey": "NVDA|Call|207.5|02/20/26|15:59 ET|0.66|99562",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "STNE",
@@ -1054,27 +1061,27 @@
       "OI": 183,
       "VolOI": 24.2,
       "Premium": 110700,
-      "Moneyness": "-5.15%",
+      "Moneyness": "-5.61%",
       "Time": "15:24 ET",
       "rowKey": "STNE|Call|19|02/20/26|15:24 ET|0.25|4428",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "AMZN",
       "Type": "Call",
       "Strike": "207.5",
       "ExpirationISO": "02/11/26",
-      "Bid": 3.05,
-      "Ask": 3.1,
-      "Last": 3.05,
-      "Volume": 23912,
+      "Bid": 2.88,
+      "Ask": 2.98,
+      "Last": 2.91,
+      "Volume": 24007,
       "OI": 1000,
-      "VolOI": 23.91,
-      "Premium": 7293160,
-      "Moneyness": "+0.85%",
+      "VolOI": 24.01,
+      "Premium": 6986037,
+      "Moneyness": "+0.58%",
       "Time": "15:59 ET",
-      "rowKey": "AMZN|Call|207.5|02/11/26|15:59 ET|3.05|23912",
-      "ts": 1770673556447
+      "rowKey": "AMZN|Call|207.5|02/11/26|15:59 ET|2.91|24007",
+      "ts": 1770674462169
     },
     {
       "Symbol": "CSCO",
@@ -1088,27 +1095,27 @@
       "OI": 146,
       "VolOI": 23.88,
       "Premium": 536998,
-      "Moneyness": "-2.58%",
+      "Moneyness": "-2.59%",
       "Time": "15:53 ET",
       "rowKey": "CSCO|Call|89|02/13/26|15:53 ET|1.54|3487",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "META",
       "Type": "Call",
       "Strike": "672.5",
       "ExpirationISO": "02/09/26",
-      "Bid": 5.15,
-      "Ask": 5.45,
+      "Bid": 4.55,
+      "Ask": 4.95,
       "Last": 4.75,
       "Volume": 7454,
       "OI": 313,
       "VolOI": 23.81,
       "Premium": 3540650,
-      "Moneyness": "+1.03%",
+      "Moneyness": "+0.72%",
       "Time": "15:57 ET",
       "rowKey": "META|Call|672.5|02/09/26|15:57 ET|4.75|7454",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "SCCO",
@@ -1122,27 +1129,27 @@
       "OI": 126,
       "VolOI": 23.52,
       "Premium": 16539120,
-      "Moneyness": "+25.71%",
+      "Moneyness": "+25.58%",
       "Time": "15:53 ET",
       "rowKey": "SCCO|Call|155|02/20/26|15:53 ET|55.8|2964",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "EXE",
       "Type": "Put",
       "Strike": "90",
       "ExpirationISO": "04/17/26",
-      "Bid": 1.67,
+      "Bid": 1.66,
       "Ask": 1.98,
       "Last": 1.8,
       "Volume": 7327,
       "OI": 314,
       "VolOI": 23.33,
       "Premium": 1318860,
-      "Moneyness": "-13.46%",
+      "Moneyness": "-12.82%",
       "Time": "10:10 ET",
       "rowKey": "EXE|Put|90|04/17/26|10:10 ET|1.8|7327",
-      "ts": 1770673556447
+      "ts": 1770674462169
     },
     {
       "Symbol": "TOST",
@@ -1156,10 +1163,10 @@
       "OI": 1029,
       "VolOI": 23.25,
       "Premium": 2871360,
-      "Moneyness": "-5.71%",
+      "Moneyness": "-4.71%",
       "Time": "15:59 ET",
       "rowKey": "TOST|Call|30|02/20/26|15:59 ET|1.2|23928",
-      "ts": 1770673556447
+      "ts": 1770674462169
     }
   ],
   "clusterData": {
